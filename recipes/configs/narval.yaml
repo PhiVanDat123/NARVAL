@@ -1,0 +1,57 @@
+# NARVAL: Nested Risk-Aware pReference distillation via teacher VALue shaping.
+#
+# Required upstream artefacts:
+#   - SFT student        -> model_name_or_path
+#   - DPO-trained teacher -> teacher_dpo_path
+#   - SFT reference teacher (same family as DPO teacher) -> teacher_ref_path
+
+# Model arguments
+model_name_or_path: model/student_sft
+torch_dtype: bfloat16
+
+# Teacher checkpoints (NARVAL-specific)
+teacher_dpo_path: model/teacher_dpo
+teacher_ref_path: model/teacher_sft
+
+# Data
+dataset_mixer:
+  /mnt/datpv/riskKD/datasets/data: 1.0
+dataset_splits:
+- train
+preprocessing_num_workers: 12
+
+# Trainer arguments
+bf16: true
+do_eval: false
+gradient_accumulation_steps: 16
+gradient_checkpointing: true
+gradient_checkpointing_kwargs:
+  use_reentrant: False
+learning_rate: 5.0e-7
+log_level: info
+logging_steps: 1
+lr_scheduler_type: cosine
+max_length: 2048
+max_prompt_length: 1800
+num_train_epochs: 5
+optim: adamw_torch
+output_dir: /mnt/datpv/riskKD/output/narval
+per_device_train_batch_size: 1
+push_to_hub: false
+save_strategy: "steps"
+save_steps: 300
+save_only_model: true
+seed: 42
+warmup_ratio: 0.1
+dataset_num_proc: 64
+
+# NARVAL hyperparameters
+beta: 0.1
+narval_mu: 0.97              # CVaR risk level (paper default)
+narval_use_token_weight: true
+narval_use_delta: true
+narval_log_ratio_clip: 30.0
+
+# wandb
+report_to: wandb
+run_name: narval-llama3.2-1b
