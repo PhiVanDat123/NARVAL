@@ -1,8 +1,7 @@
 # NARVAL — Nested Risk-Aware Preference Distillation via Teacher Value Shaping
 
 Self-contained training package for the **NARVAL** objective from
-*Nested Risk-Aware Preference Distillation via Teacher Value Shaping*
-(EMNLP 2026 submission).
+*Nested Risk-Aware Preference Distillation via Teacher Value Shaping*.
 
 NARVAL combines three signals into a single Bradley-Terry style distillation
 objective for a small student model:
